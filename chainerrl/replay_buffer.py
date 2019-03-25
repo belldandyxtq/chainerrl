@@ -14,6 +14,7 @@ import collections
 
 import numpy as np
 import six.moves.cPickle as pickle
+import chainerio
 
 from chainerrl.misc.batch_states import batch_states
 from chainerrl.misc.collections import RandomAccessQueue
@@ -173,11 +174,11 @@ class ReplayBuffer(AbstractReplayBuffer):
         return len(self.memory)
 
     def save(self, filename):
-        with open(filename, 'wb') as f:
+        with chainerio.open(filename, 'wb') as f:
             pickle.dump(self.memory, f)
 
     def load(self, filename):
-        with open(filename, 'rb') as f:
+        with chainerio.open(filename, 'rb') as f:
             self.memory = pickle.load(f)
         if isinstance(self.memory, collections.deque):
             # Load v0.2
@@ -330,11 +331,11 @@ class EpisodicReplayBuffer(AbstractEpisodicReplayBuffer):
         return len(self.episodic_memory)
 
     def save(self, filename):
-        with open(filename, 'wb') as f:
+        with chainerrl.open(filename, 'wb') as f:
             pickle.dump((self.memory, self.episodic_memory), f)
 
     def load(self, filename):
-        with open(filename, 'rb') as f:
+        with chainerrl.open(filename, 'rb') as f:
             memory = pickle.load(f)
         if isinstance(memory, tuple):
             self.memory, self.episodic_memory = memory
